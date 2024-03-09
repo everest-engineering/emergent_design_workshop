@@ -3,7 +3,7 @@ import {time} from "../../../src/types";
 import {Cat} from "../../../src/cat";
 import {World} from "../../../src/world";
 
-describe("WorldImpl", () => {
+describe("WorldImpl (state)", () => {
   let cat1: Cat;
   let cat2: Cat;
   let cat3: Cat;
