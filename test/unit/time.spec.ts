@@ -1,4 +1,4 @@
-import {compare, Future, next, Past, Present, time} from "../../src/types";
+import {compare, Future, next, Past, Present, time} from "../../src/time";
 
 describe("compare()", () => {
   describe("when comparison time is in the past", () => {

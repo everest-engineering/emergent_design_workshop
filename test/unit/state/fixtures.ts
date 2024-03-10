@@ -1,14 +1,27 @@
-import {time, Time} from "../../../src/types";
+import {time, Time} from "../../../src/time";
 import {Cat, CatImpl} from "../../../src/cat";
 import {World, WorldImpl} from "../../../src/world";
+import {HumanImpl} from "../../../src/human";
+import {FeedingSchedule, FeedingTime} from "../../../src/schedule";
 
-type CatArgs = { feedingTime?: Time };
+type CatArgs = { feedingTime?: Time, schedule?: FeedingSchedule };
 
-export function cat({ feedingTime }: CatArgs): Cat {
-  if (!feedingTime) {
-    feedingTime = time(12, 0);
+export function human() {
+  return new HumanImpl();
+}
+
+export function feedingSchedule(...times: Time[]) {
+  return times.map((time) => [time, human()] as FeedingTime);
+}
+
+export function cat({ feedingTime, schedule }: CatArgs): Cat {
+  if (!schedule) {
+    if (!feedingTime) {
+      feedingTime = time(12, 0);
+    }
+    schedule = feedingSchedule(feedingTime)
   }
-  return new CatImpl(feedingTime);
+  return new CatImpl(schedule);
 }
 
 

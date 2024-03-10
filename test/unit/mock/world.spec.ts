@@ -1,20 +1,23 @@
 import {Cat} from "../../../src/cat";
 import {World, WorldImpl} from "../../../src/world";
-import {Time, time} from "../../../src/types";
+import {Time, time} from "../../../src/time";
+import {FeedingSchedule} from "../../../src/schedule";
 
 
-function mockCat(feedingTime: Time): Cat {
+function mockCat(...feedingTimes: Time[]): Cat {
+  const feedingSchedule: FeedingSchedule = feedingTimes.map((feedTime) => [feedTime, {}])
   return {
-    feedingTime: feedingTime,
+    feedingSchedule,
     isFed: jest.fn(),
     feed: jest.fn(),
+    numberFeeds: jest.fn(),
   };
 }
 
 describe("WorldImpl (mock)", () => {
   let cat1: Cat;
   let cat2: Cat;
-  let cat3: Cat;
+  let greedyCat: Cat;
 
   let catWorld: World;
 
@@ -26,9 +29,12 @@ describe("WorldImpl (mock)", () => {
   beforeEach(() => {
     cat1 = mockCat(midnight)
     cat2 = mockCat(midday)
-    cat3 = mockCat(endOfDay)
+    greedyCat = mockCat(
+      time(22, 30),
+      time(23, 0),
+      endOfDay)
 
-    catWorld = new WorldImpl([cat1, cat2, cat3]);
+    catWorld = new WorldImpl([cat1, cat2, greedyCat]);
   })
 
   describe("running simulation for full day period", () => {
@@ -39,7 +45,7 @@ describe("WorldImpl (mock)", () => {
 
       expect(cat1.feed).toBeCalledTimes(1);
       expect(cat2.feed).toBeCalledTimes(1);
-      expect(cat3.feed).toBeCalledTimes(1);
+      expect(greedyCat.feed).toBeCalledTimes(3);
     })
   })
 
@@ -50,9 +56,7 @@ describe("WorldImpl (mock)", () => {
 
       expect(cat1.feed).toBeCalledTimes(1);
       expect(cat2.feed).toBeCalledTimes(1);
-      expect(cat3.feed).toBeCalledTimes(0);
+      expect(greedyCat.feed).toBeCalledTimes(0);
     })
   })
-
-
 })

@@ -1,4 +1,4 @@
-import {compare, next, Past, Present, Time} from "./types";
+import {compare, next, Past, Present, Time} from "./time";
 import {Cat} from "./cat";
 
 export interface World {
@@ -16,9 +16,11 @@ export class WorldImpl implements World {
 
     while (true) {
       this.cats.forEach((cat) => {
-        if (compare(cat.feedingTime, currentTick) === Present) {
-          cat.feed()
-        }
+        cat.feedingSchedule.forEach(([feedingTime, human]) => {
+          if (compare(feedingTime, currentTick) === Present) {
+            cat.feed()
+          }
+        })
       });
 
       if (compare(currentTick, endTime) === Present) {

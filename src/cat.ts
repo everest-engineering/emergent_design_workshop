@@ -1,18 +1,20 @@
-import {Time} from "./types";
+import {FeedingSchedule} from "./schedule";
 
 export interface Cat {
-  readonly feedingTime: Time;
+  readonly feedingSchedule: FeedingSchedule;
 
   isFed(): boolean;
   feed(): void;
+  numberFeeds(): number;
 }
 
 export class CatImpl implements Cat{
-  public readonly feedingTime: Time;
+  public readonly feedingSchedule: FeedingSchedule;
   private fed: boolean = false;
+  private feeds: number = 0;
 
-  constructor(feedingTime: Time) {
-    this.feedingTime = feedingTime;
+  constructor(feedingSchedule: FeedingSchedule) {
+    this.feedingSchedule = feedingSchedule;
   }
 
   isFed(): boolean {
@@ -21,5 +23,10 @@ export class CatImpl implements Cat{
 
   feed(): void {
     this.fed = true;
+    this.feeds++;
+  }
+
+  numberFeeds(): number {
+    return this.feeds;
   }
 }
